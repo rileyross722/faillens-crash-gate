@@ -90,6 +90,21 @@ That means invalid hosted calls, such as payloadFile, may still be charged.
 
 For hosted usage, send log content using payload, payloadBase64, payloadChunks, or payloadBase64Chunks.
 
+
+## Why this saves money
+
+A normal FailLens call costs $0.02.
+
+A large FailLens call costs $0.08.
+
+The expensive part is usually not the FailLens call. The expensive part is agent context waste, wrong retries, developer debugging time, repeated CI friction, and unsafe raw-log handoff.
+
+FailLens helps turn a noisy failed command into a small, redacted evidence window that a coding agent can actually use.
+
+See:
+
+- docs/COST_AND_ROI.md
+
 ## Example result
 
 Input:
@@ -132,6 +147,20 @@ See:
 - docs/PUBLIC_PROOF_LIBRARY.md
 - docs/INVALID_CALLS_AND_BILLING.md
 - docs/XPAY_PAGE_COPY.md
+
+- docs/V2_6_0_LIVE_XPAY_SMOKE.md
+
+- docs/FAILLENS_RESCUE_PLAYBOOK.md
+
+- docs/FEEDBACK_TEMPLATE.md
+
+- docs/CASE_STUDY_TEMPLATE.md
+
+- docs/USER_FEEDBACK_CHECKLIST.md
+
+- docs/agents/README.md
+
+- examples/public-proof/
 
 ## Repository note
 

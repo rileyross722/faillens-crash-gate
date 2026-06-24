@@ -1,0 +1,85 @@
+{
+  "version": "2.5.0",
+  "decision": "redact",
+  "risk": "high",
+  "payload_type": "ci_crash",
+  "source": "github_actions",
+  "safe_to_send": false,
+  "recommended_next": "redact_then_retry",
+  "failure": {
+    "type": "missing_dependency",
+    "subject": "@stripe/stripe-js",
+    "likely_next": "install_dependency_or_fix_import",
+    "confidence": 0.91,
+    "reason": "The log reports a missing JavaScript/Node module."
+  },
+  "input": {
+    "original_chars": 222,
+    "original_lines": 6,
+    "tier": "normal",
+    "context_budget": 1200,
+    "max_rendered_window_chars": 4800
+  },
+  "noise_removed": {
+    "original_chars": 179,
+    "cleaned_chars": 173,
+    "original_lines": 6,
+    "cleaned_lines": 5,
+    "ansi_chars_removed": 0,
+    "timestamp_lines_removed": 0,
+    "progress_lines_removed": 0,
+    "duplicate_lines_removed": 0,
+    "blank_lines_removed": 1
+  },
+  "secrets": {
+    "redacted": true,
+    "count": 2,
+    "kinds": [
+      "database_url",
+      "bearer_token"
+    ],
+    "findings": [
+      {
+        "kind": "database_url",
+        "label": "Database URL",
+        "severity": "high"
+      },
+      {
+        "kind": "bearer_token",
+        "label": "Bearer token",
+        "severity": "high"
+      }
+    ]
+  },
+  "anchors": [
+    "missing_module",
+    "exit_code"
+  ],
+  "evidence": [
+    "npm ERR! Cannot find module '@stripe/stripe-js'",
+    "Process completed with exit code 1"
+  ],
+  "window": {
+    "start_line": 1,
+    "end_line": 5,
+    "total_lines": 5,
+    "selected_lines": 5,
+    "confidence": 0.97,
+    "text": "Running CI job\nDATABASE_URL=[REDACTED:database_url]\nAuthorization: [REDACTED:bearer_token]\nnpm ERR! Cannot find module '@stripe/stripe-js'\nProcess completed with exit code 1",
+    "text_truncated": false,
+    "anchors": [
+      {
+        "type": "missing_module",
+        "line_number": 4,
+        "score": 100,
+        "text": "npm ERR! Cannot find module '@stripe/stripe-js'"
+      },
+      {
+        "type": "exit_code",
+        "line_number": 5,
+        "score": 53,
+        "text": "Process completed with exit code 1"
+      }
+    ]
+  }
+}

@@ -1,0 +1,100 @@
+{
+  "version": "2.5.0",
+  "decision": "extract_failure",
+  "risk": "clean",
+  "payload_type": "ci_crash",
+  "source": "github_actions",
+  "safe_to_send": true,
+  "recommended_next": "send_window_to_llm",
+  "failure": {
+    "type": "typescript_module_resolution",
+    "subject": "@stripe/stripe-js",
+    "likely_next": "install_dependency_or_fix_import",
+    "confidence": 0.93,
+    "reason": "TypeScript reported TS2307 for a missing module."
+  },
+  "input": {
+    "original_chars": 331,
+    "original_lines": 13,
+    "tier": "normal",
+    "context_budget": 1200,
+    "max_rendered_window_chars": 4800
+  },
+  "noise_removed": {
+    "original_chars": 331,
+    "cleaned_chars": 296,
+    "original_lines": 13,
+    "cleaned_lines": 9,
+    "ansi_chars_removed": 0,
+    "timestamp_lines_removed": 0,
+    "progress_lines_removed": 1,
+    "duplicate_lines_removed": 0,
+    "blank_lines_removed": 3
+  },
+  "secrets": {
+    "redacted": false,
+    "count": 0,
+    "kinds": [],
+    "findings": []
+  },
+  "anchors": [
+    "missing_module",
+    "npm_error",
+    "exit_code"
+  ],
+  "evidence": [
+    "src/App.tsx:4:28 - error TS2307: Cannot find module '@stripe/stripe-js' or its corresponding type declarations.",
+    "npm ERR! Exit status 2",
+    "npm ERR! app@1.0.0 build: `vite build`",
+    "npm ERR! errno 2",
+    "npm ERR! code ELIFECYCLE",
+    "Process completed with exit code 1"
+  ],
+  "window": {
+    "start_line": 1,
+    "end_line": 9,
+    "total_lines": 9,
+    "selected_lines": 9,
+    "confidence": 0.98,
+    "text": "starting build\n> app@1.0.0 build\n> vite build\nsrc/App.tsx:4:28 - error TS2307: Cannot find module '@stripe/stripe-js' or its corresponding type declarations.\nnpm ERR! code ELIFECYCLE\nnpm ERR! errno 2\nnpm ERR! app@1.0.0 build: `vite build`\nnpm ERR! Exit status 2\nProcess completed with exit code 1",
+    "text_truncated": false,
+    "anchors": [
+      {
+        "type": "missing_module",
+        "line_number": 4,
+        "score": 97,
+        "text": "src/App.tsx:4:28 - error TS2307: Cannot find module '@stripe/stripe-js' or its corresponding type declarations."
+      },
+      {
+        "type": "npm_error",
+        "line_number": 8,
+        "score": 95,
+        "text": "npm ERR! Exit status 2"
+      },
+      {
+        "type": "npm_error",
+        "line_number": 7,
+        "score": 94,
+        "text": "npm ERR! app@1.0.0 build: `vite build`"
+      },
+      {
+        "type": "npm_error",
+        "line_number": 6,
+        "score": 93,
+        "text": "npm ERR! errno 2"
+      },
+      {
+        "type": "npm_error",
+        "line_number": 5,
+        "score": 92,
+        "text": "npm ERR! code ELIFECYCLE"
+      },
+      {
+        "type": "exit_code",
+        "line_number": 9,
+        "score": 53,
+        "text": "Process completed with exit code 1"
+      }
+    ]
+  }
+}

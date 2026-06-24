@@ -1,0 +1,69 @@
+{
+  "version": "2.5.0",
+  "decision": "extract_failure",
+  "risk": "clean",
+  "payload_type": "ci_crash",
+  "source": "github_actions",
+  "safe_to_send": true,
+  "recommended_next": "send_window_to_llm",
+  "failure": {
+    "type": "oom_or_killed",
+    "likely_next": "increase_memory_or_reduce_workload",
+    "confidence": 0.84,
+    "reason": "The process appears to have been killed or exceeded available memory."
+  },
+  "input": {
+    "original_chars": 81,
+    "original_lines": 3,
+    "tier": "normal",
+    "context_budget": 1200,
+    "max_rendered_window_chars": 4800
+  },
+  "noise_removed": {
+    "original_chars": 81,
+    "cleaned_chars": 80,
+    "original_lines": 3,
+    "cleaned_lines": 2,
+    "ansi_chars_removed": 0,
+    "timestamp_lines_removed": 0,
+    "progress_lines_removed": 0,
+    "duplicate_lines_removed": 0,
+    "blank_lines_removed": 1
+  },
+  "secrets": {
+    "redacted": false,
+    "count": 0,
+    "kinds": [],
+    "findings": []
+  },
+  "anchors": [
+    "unknown_anchor"
+  ],
+  "evidence": [
+    "The command was terminated because the process exceeded available memory.",
+    "Killed"
+  ],
+  "window": {
+    "start_line": 1,
+    "end_line": 2,
+    "total_lines": 2,
+    "selected_lines": 2,
+    "confidence": 0.98,
+    "text": "Killed\nThe command was terminated because the process exceeded available memory.",
+    "text_truncated": false,
+    "anchors": [
+      {
+        "type": "unknown_anchor",
+        "line_number": 2,
+        "score": 104,
+        "text": "The command was terminated because the process exceeded available memory."
+      },
+      {
+        "type": "unknown_anchor",
+        "line_number": 1,
+        "score": 96,
+        "text": "Killed"
+      }
+    ]
+  }
+}

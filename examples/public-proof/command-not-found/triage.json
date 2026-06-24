@@ -1,0 +1,71 @@
+{
+  "version": "2.5.0",
+  "decision": "extract_failure",
+  "risk": "clean",
+  "payload_type": "ci_crash",
+  "source": "github_actions",
+  "safe_to_send": true,
+  "recommended_next": "send_window_to_llm",
+  "failure": {
+    "type": "command_not_found",
+    "subject": "turbooooo",
+    "likely_next": "install_or_fix_command_path",
+    "confidence": 0.86,
+    "reason": "The shell reported a missing command or exit code 127."
+  },
+  "input": {
+    "original_chars": 73,
+    "original_lines": 3,
+    "tier": "normal",
+    "context_budget": 1200,
+    "max_rendered_window_chars": 4800
+  },
+  "noise_removed": {
+    "original_chars": 73,
+    "cleaned_chars": 72,
+    "original_lines": 3,
+    "cleaned_lines": 2,
+    "ansi_chars_removed": 0,
+    "timestamp_lines_removed": 0,
+    "progress_lines_removed": 0,
+    "duplicate_lines_removed": 0,
+    "blank_lines_removed": 1
+  },
+  "secrets": {
+    "redacted": false,
+    "count": 0,
+    "kinds": [],
+    "findings": []
+  },
+  "anchors": [
+    "unknown_anchor",
+    "exit_code"
+  ],
+  "evidence": [
+    "sh: 1: turbooooo: not found",
+    "Error: Process completed with exit code 127."
+  ],
+  "window": {
+    "start_line": 1,
+    "end_line": 2,
+    "total_lines": 2,
+    "selected_lines": 2,
+    "confidence": 0.93,
+    "text": "sh: 1: turbooooo: not found\nError: Process completed with exit code 127.",
+    "text_truncated": false,
+    "anchors": [
+      {
+        "type": "unknown_anchor",
+        "line_number": 1,
+        "score": 96,
+        "text": "sh: 1: turbooooo: not found"
+      },
+      {
+        "type": "exit_code",
+        "line_number": 2,
+        "score": 53,
+        "text": "Error: Process completed with exit code 127."
+      }
+    ]
+  }
+}

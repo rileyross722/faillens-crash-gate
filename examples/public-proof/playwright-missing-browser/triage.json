@@ -1,0 +1,79 @@
+{
+  "version": "2.5.0",
+  "decision": "extract_failure",
+  "risk": "clean",
+  "payload_type": "test_failure",
+  "source": "playwright",
+  "safe_to_send": true,
+  "recommended_next": "send_window_to_llm",
+  "failure": {
+    "type": "playwright_browser_missing",
+    "likely_next": "install_playwright_browsers",
+    "confidence": 0.9,
+    "reason": "Playwright appears to be missing its browser binaries."
+  },
+  "input": {
+    "original_chars": 249,
+    "original_lines": 6,
+    "tier": "normal",
+    "context_budget": 1200,
+    "max_rendered_window_chars": 4800
+  },
+  "noise_removed": {
+    "original_chars": 249,
+    "cleaned_chars": 243,
+    "original_lines": 6,
+    "cleaned_lines": 5,
+    "ansi_chars_removed": 0,
+    "timestamp_lines_removed": 0,
+    "progress_lines_removed": 0,
+    "duplicate_lines_removed": 0,
+    "blank_lines_removed": 1
+  },
+  "secrets": {
+    "redacted": false,
+    "count": 0,
+    "kinds": [],
+    "findings": []
+  },
+  "anchors": [
+    "playwright_missing_browser",
+    "exit_code"
+  ],
+  "evidence": [
+    "Please run npx playwright install",
+    "browserType.launch: Executable doesn't exist at /ms-playwright/chromium-1091/chrome-linux/chrome",
+    "Process completed with exit code 1",
+    "Running Playwright tests",
+    "Looks like Playwright was just installed or updated."
+  ],
+  "window": {
+    "start_line": 1,
+    "end_line": 5,
+    "total_lines": 5,
+    "selected_lines": 5,
+    "confidence": 0.98,
+    "text": "Running Playwright tests\nbrowserType.launch: Executable doesn't exist at /ms-playwright/chromium-1091/chrome-linux/chrome\nLooks like Playwright was just installed or updated.\nPlease run npx playwright install\nProcess completed with exit code 1",
+    "text_truncated": false,
+    "anchors": [
+      {
+        "type": "playwright_missing_browser",
+        "line_number": 4,
+        "score": 104,
+        "text": "Please run npx playwright install"
+      },
+      {
+        "type": "playwright_missing_browser",
+        "line_number": 2,
+        "score": 100,
+        "text": "browserType.launch: Executable doesn't exist at /ms-playwright/chromium-1091/chrome-linux/chrome"
+      },
+      {
+        "type": "exit_code",
+        "line_number": 5,
+        "score": 53,
+        "text": "Process completed with exit code 1"
+      }
+    ]
+  }
+}

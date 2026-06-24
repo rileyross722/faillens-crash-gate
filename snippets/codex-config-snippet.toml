@@ -1,0 +1,20 @@
+# FailLens Crash Gate MCP
+# Replace YOUR_XPAY_KEY with a key generated from:
+# https://faillens-crash-gate.on.xpay.sh/
+#
+# Do not commit real keys.
+
+[mcp_servers.faillens_crash_gate]
+url = "https://faillens-crash-gate.mcp.xpay.sh/mcp?key=YOUR_XPAY_KEY"
+
+# Suggested server instruction:
+# Use FailLens when a terminal, build, test, install, Docker, Playwright,
+# pytest, TypeScript, local-server, or CI command fails and produces noisy logs.
+# Send the failed log to FailLens first.
+#
+# Use triage_terminal_crash for normal failed logs.
+# Use triage_large_terminal_crash for large or very noisy failed logs.
+#
+# Continue automatically only when safe_to_send is true.
+# If safe_to_send is false, stop and request manual review.
+

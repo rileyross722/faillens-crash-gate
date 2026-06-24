@@ -1,34 +1,64 @@
 # Public Proof Library
 
-This library shows the kinds of failures FailLens is designed to triage.
+FailLens is easiest to understand through before/after examples.
 
-The examples are intentionally safe and do not include real customer logs, real secrets, private repository names, or raw proprietary evidence.
+## Pattern
 
-## Proof cases
+    raw noisy log
+    -> FailLens Crash Gate
+    -> safe structured failure evidence
 
-| Case | Failure type | Value |
-|---|---|---|
-| npm missing module | missing_dependency | Finds the useful module error without reading the whole log |
-| command not found | command_not_found | Detects the failed command and likely next step |
-| large noisy CI | command_not_found | Ignores repeated noise and extracts the failure window |
-| Playwright missing browser | missing_runtime_dependency | Identifies missing browser/runtime setup |
-| redaction safety | redacted_sensitive_value | Shows that secret-looking values are not forwarded raw |
+## Example 1: npm missing dependency
 
-## Core output fields
+Raw log excerpt:
 
-FailLens returns:
+    npm ERR! Cannot find module @stripe/stripe-js
+    Process completed with exit code 1
 
-- decision
-- risk
-- failure_type
-- likely_next
-- safe_to_send
-- evidence
-- window_text
+FailLens result:
 
-## Safety note
+    decision: extract_failure
+    risk: clean
+    failure.type: missing_dependency
+    failure.subject: @stripe/stripe-js
+    safe_to_send: true
+    recommended_next: send_window_to_llm
 
-Public examples use safe, artificial snippets.
+Why it helps:
 
-Real user logs should not be published without explicit permission.
+    The agent does not need the entire install/build log.
+    It needs the bounded failure evidence and safe_to_send decision.
 
+## Example 2: hosted payloadFile safety
+
+Hosted request shape:
+
+    payloadFile="/etc/hosts"
+
+FailLens result:
+
+    decision: unknown
+    safe_to_send: false
+    error: payload_file_not_allowed
+    recommended_next: retry_with_payload_or_payload_chunks
+
+Why it helps:
+
+    Hosted callers can send large log content, but they cannot make the hosted service read server-side file paths.
+
+## Example 3: large log route
+
+Tool:
+
+    triage_large_terminal_crash
+
+Use case:
+
+    large CI logs
+    noisy browser test failures
+    Docker build spam
+    monorepo build failures
+
+Expected value:
+
+    The agent receives the relevant bounded failure window instead of the entire log.

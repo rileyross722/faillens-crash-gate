@@ -1,18 +1,39 @@
-# FailLens Terminal Crash Gate
+# FailLens Crash Gate
 
-Safe crash-log triage for coding agents and CI workflows.
+Crash-log triage for coding agents.
 
 Massive crash log -> safe failure evidence -> agent continues.
 
-FailLens turns noisy failed terminal, build, test, install, Docker, Playwright, pytest, TypeScript, local-server, and CI logs into compact, redacted failure evidence.
+FailLens Crash Gate turns noisy terminal, build, test, install, Docker, Playwright, pytest, TypeScript, local-server, and CI failures into compact redacted evidence that coding agents can safely use.
 
-The goal is simple: stop coding agents from wasting context, credits, and time on terminal sewage.
+## What it does
 
-## Get a pay-per-use key
+When a command fails and produces a huge noisy log, FailLens helps an agent avoid reading the whole swamp.
 
-Use the FailLens xpay page:
+It returns:
 
-https://faillens-crash-gate.on.xpay.sh/
+- bounded failure window
+- failure type
+- likely next action
+- redaction signal
+- safe_to_send
+- compact structured evidence
+
+## Pay-per-use xpay access
+
+Open:
+
+    https://faillens-crash-gate.on.xpay.sh/
+
+Generate a pay-per-use key.
+
+Then connect the generated MCP URL to your MCP-compatible client or coding agent.
+
+Do not commit real key-bearing MCP URLs.
+
+Use placeholders in docs:
+
+    https://faillens-crash-gate.mcp.xpay.sh/mcp?key=YOUR_XPAY_KEY
 
 ## Tools and pricing
 
@@ -21,92 +42,99 @@ https://faillens-crash-gate.on.xpay.sh/
 | triage_terminal_crash | $0.02 / call | Normal failed terminal, build, test, install, Docker, Playwright, pytest, TypeScript, local-server, or CI logs |
 | triage_large_terminal_crash | $0.08 / call | Large or very noisy failed logs |
 
-## What FailLens returns
+## Agent rule
 
-FailLens returns a compact triage result with:
+Give your coding agent this rule:
 
-- decision
-- risk
-- failure_type
-- likely_next
-- safe_to_send
-- redaction signal
-- bounded evidence window
+    When a terminal command, install, build, test, Docker build, Playwright run, pytest run, TypeScript compile, local server start, or CI job fails and produces noisy logs, call FailLens Crash Gate before reasoning over the full raw log.
 
-## Best for
+    Use triage_terminal_crash for normal logs.
 
-- failed CI jobs
-- noisy terminal failures
-- failed npm, pnpm, or yarn installs
-- TypeScript build failures
-- pytest failures
-- Playwright failures
-- Docker build failures
-- local server startup failures
-- coding agents that should not read raw logs directly
+    Use triage_large_terminal_crash for large or very noisy logs.
 
-## Why this saves money
+    Only send the returned failure window onward automatically when safe_to_send is true.
 
-FailLens can reduce:
+    If safe_to_send is false, stop and ask for manual review.
 
-- developer time spent scrolling logs
-- coding-agent retries
-- token and context waste
-- unsafe raw-log sharing
-- repeated CI/debugging loops
+## Hosted payload rule
 
-For an active developer, the value is not the few cents per call. The value is avoiding hours of failed-build drag and unnecessary agent-credit burn.
+Hosted xpay/MCP accepts log content.
 
-## Safety posture
+Use:
 
-FailLens is designed as a crash-log gate, not a log warehouse.
+    payload
+    rawPayload
+    payloadBase64
+    payloadChunks
+    payloadBase64Chunks
+    log
+    logs
+    text
+    input
+    data
 
-- Raw logs are not stored by default.
-- Local CLI and GitHub Action usage do not phone home by default.
-- Hosted MCP/xpay usage may produce metadata-only usage events.
-- safe_to_send=false means manual review.
+Do not use hosted payloadFile.
+
+Hosted payloadFile is rejected because remote callers must not be able to make the hosted service read server-side file paths.
+
+Rule:
+
+    Large log content: yes.
+    Remote server file path: no.
+
+## Invalid paid calls
+
+xpay may charge for a tool call before the hosted service validates the payload shape.
+
+That means invalid hosted calls, such as payloadFile, may still be charged.
+
+For hosted usage, send log content using payload, payloadBase64, payloadChunks, or payloadBase64Chunks.
+
+## Example result
+
+Input:
+
+    npm ERR! Cannot find module @stripe/stripe-js
+    Process completed with exit code 1
+
+Output shape:
+
+    decision: extract_failure
+    risk: clean
+    failure.type: missing_dependency
+    failure.subject: @stripe/stripe-js
+    safe_to_send: true
+    recommended_next: send_window_to_llm
 
 ## What FailLens is not
 
 FailLens is not:
 
-- a full debugger
 - Sentry
 - Datadog
 - Gitleaks
 - TruffleHog
+- a full debugger
 - a production observability platform
 - a generic context compressor
 - a dashboard
 
 It does one narrow job:
 
-failed command -> redacted bounded evidence -> agent-safe next step
+    failed command -> redacted bounded evidence -> agent-safe next step
 
-## Public proof
+## Public docs
 
 See:
 
-- docs/PUBLIC_PROOF_LIBRARY.md
+- docs/XPAY_SETUP.md
 - docs/PRIVACY_AND_LOG_SAFETY.md
-- docs/PUBLIC_RELEASE_USAGE.md
-- docs/AGENT_SETUP.md
-
-## MCP connection
-
-Generate the MCP connection URL from the xpay page:
-
-https://faillens-crash-gate.on.xpay.sh/
-
-Do not publish real key-bearing URLs.
-
-Public examples may use placeholders only:
-
-https://faillens-crash-gate.mcp.xpay.sh/mcp?key=YOUR_XPAY_KEY
+- docs/PUBLIC_PROOF_LIBRARY.md
+- docs/INVALID_CALLS_AND_BILLING.md
+- docs/XPAY_PAGE_COPY.md
 
 ## Repository note
 
-This repository contains public product documentation, proof examples, and setup snippets.
+This repository is the public documentation, setup, and proof shell for FailLens Crash Gate.
 
 The hosted FailLens service and core implementation are proprietary.
-

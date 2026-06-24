@@ -1,45 +1,44 @@
 # Privacy and Log Safety
 
-FailLens is built for crash-log triage, not raw log storage.
+FailLens Crash Gate is designed as a crash-log gate, not a log warehouse.
 
 ## Default posture
 
 - Raw logs are not stored by default.
-- Local CLI usage does not phone home by default.
-- GitHub Action usage does not phone home by default.
-- Hosted MCP/xpay usage may produce metadata-only usage events.
+- Hosted xpay/MCP usage may produce metadata-only usage events.
+- Metadata should not include raw logs, evidence text, stack trace bodies, repo contents, or secret values.
 - safe_to_send=false means manual review.
 
-## Metadata-only hosted usage
+## Hosted file-path rule
 
-Hosted usage metadata may include operational fields such as:
+Hosted xpay/MCP rejects payloadFile.
 
-- tool name
-- timestamp
-- payload size range
-- failure type
-- safe_to_send status
-- risk level
-- source label
+Reason:
 
-It should not include:
+    Remote callers must not be able to make the hosted service read server-side file paths.
 
-- raw logs
-- private source code
-- private repository contents
-- full evidence window text
-- secrets
-- key-bearing URLs
+Use log content instead:
+
+    payload
+    payloadBase64
+    payloadChunks
+    payloadBase64Chunks
+
+## Large logs
+
+Large logs are supported as content.
+
+Rule:
+
+    Large log content: yes.
+    Remote server file path: no.
+
+For local workflows, capture the log locally, then send the content or chunks to FailLens.
 
 ## Redaction
 
-FailLens detects secret-looking values and returns a redacted bounded failure window.
+FailLens performs crash-payload safety redaction for common secret-like material.
 
-Redaction is a safety layer, not a replacement for a full repository secret scanner.
+It is not a full repository secret scanner.
 
-## Manual review rule
-
-If safe_to_send=false, do not automatically forward the output to another model or agent.
-
-Request manual review first.
-
+Do not use FailLens as a replacement for dedicated secret-scanning tools.

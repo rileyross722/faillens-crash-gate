@@ -162,6 +162,17 @@ See:
 
 - examples/public-proof/
 
+## Value and objections
+
+- docs/WHY_XPAY_FIRST.md
+- docs/WHY_NOT_TAIL_GREP.md
+- docs/AGENT_BUILDER_VALUE.md
+- docs/SOLO_DEVELOPER_QUICKSTART.md
+- docs/CI_VALUE.md
+- docs/SECURITY_POSTURE.md
+- docs/BUYER_OBJECTIONS.md
+- docs/RELEASE_V2_6_2.md
+
 ## Repository note
 
 This repository is the public documentation, setup, and proof shell for FailLens Crash Gate.

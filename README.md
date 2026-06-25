@@ -178,3 +178,16 @@ See:
 This repository is the public documentation, setup, and proof shell for FailLens Crash Gate.
 
 The hosted FailLens service and core implementation are proprietary.
+
+## Public proof library
+
+FailLens includes a small public proof library showing how it extracts bounded failure signals from already-public issue output.
+
+Start here:
+
+- [Public proof library](docs/public-proof/README.md)
+- [OmniRoute #3578: MCP startup failure from missing runtime import](docs/public-proof/omniroute-3578.md)
+- [OmniRoute #5006: packaged route failure from bundled build path](docs/public-proof/omniroute-5006.md)
+- [OmniRoute #4091: MCP dispatch failure with schema visible but routed call rejected](docs/public-proof/omniroute-4091.md)
+
+These examples are not endorsements from the source projects. They are public extraction examples using already-public issue details.

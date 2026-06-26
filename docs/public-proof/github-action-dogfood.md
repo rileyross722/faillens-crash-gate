@@ -47,3 +47,22 @@ The intended workflow is:
     → developer or coding agent reads the useful signal first
 
 This is not a general observability platform, debugger, or secret scanner. It is a crash-log gate for failed commands and coding-agent workflows.
+
+
+## Production dogfood run
+
+A production dogfood run passed through the protected direct API path.
+
+Observed result:
+
+| Field | Value |
+|---|---|
+| Mode | direct_http |
+| Decision | extract_failure |
+| Risk | clean |
+| Safe to send | true |
+| Failure type | missing_dependency |
+| Failure subject | @faillens/definitely-missing-test-package |
+| Recommended next | send_window_to_llm |
+
+This confirms the public GitHub Action can call the production FailLens API with a protected token and return a bounded failure summary.

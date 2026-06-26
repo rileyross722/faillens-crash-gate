@@ -20,7 +20,7 @@ Use this when you want FailLens to run a command, capture its output, and triage
 Example:
 
     - name: Run tests through FailLens
-      uses: rileyross722/faillens-crash-gate@main
+      uses: rileyross722/faillens-crash-gate@v0.1.0
       with:
         command: npm test
         faillens_api_url: ${{ secrets.FAILLENS_API_URL }}
@@ -42,7 +42,7 @@ Example:
 
     - name: Triage failed log with FailLens
       if: steps.test.outputs.exit_code != '0'
-      uses: rileyross722/faillens-crash-gate@main
+      uses: rileyross722/faillens-crash-gate@v0.1.0
       with:
         log_file: faillens.log
         faillens_api_url: ${{ secrets.FAILLENS_API_URL }}

@@ -1,0 +1,44 @@
+name: FailLens Action Dogfood
+
+on:
+  workflow_dispatch:
+
+jobs:
+  command-wrapper-dogfood:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Dogfood FailLens command wrapper
+        id: faillens
+        uses: ./
+        with:
+          command: node -e "console.error(\"npm ERR! Cannot find module '@faillens/definitely-missing-test-package'\"); console.error('Require stack:'); console.error('- dogfood/index.js'); console.error('Process completed with exit code 1'); process.exit(1)"
+          xpay_mcp_url: ${{ secrets.FAILLENS_XPAY_MCP_URL }}
+          source: github_actions
+          quiet: "true"
+          fail_on_command_failure: "false"
+          max_xpay_bytes: "180000"
+
+      - name: Show FailLens outputs
+        run: |
+          echo "decision=${{ steps.faillens.outputs.decision }}"
+          echo "risk=${{ steps.faillens.outputs.risk }}"
+          echo "safe_to_send=${{ steps.faillens.outputs.safe_to_send }}"
+          echo "failure_type=${{ steps.faillens.outputs.failure_type }}"
+          echo "failure_subject=${{ steps.faillens.outputs.failure_subject }}"
+          echo "recommended_next=${{ steps.faillens.outputs.recommended_next }}"
+
+      - name: Upload FailLens triage artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: faillens-triage
+          path: ${{ steps.faillens.outputs.triage_json_path }}
+          if-no-files-found: warn

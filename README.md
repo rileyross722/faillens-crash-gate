@@ -204,10 +204,20 @@ FailLens includes a small public proof library showing how it extracts bounded f
 
 Start here:
 
-- [Public proof library](docs/public-proof/README.md
-- GitHub Action dogfood proof: docs/public-proof/github-action-dogfood.md)
+- [Public proof library](docs/public-proof/README.md)
+- [GitHub Action dogfood proof](docs/public-proof/github-action-dogfood.md)
 - [OmniRoute #3578: MCP startup failure from missing runtime import](docs/public-proof/omniroute-3578.md)
 - [OmniRoute #5006: packaged route failure from bundled build path](docs/public-proof/omniroute-5006.md)
 - [OmniRoute #4091: MCP dispatch failure with schema visible but routed call rejected](docs/public-proof/omniroute-4091.md)
 
 These examples are not endorsements from the source projects. They are public extraction examples using already-public issue details.
+
+
+## Usage rails
+
+FailLens has two usage rails:
+
+- MCP agents use the xpay MCP route for paid per-call triage.
+- CI workflows use the GitHub Action with a protected FailLens API token.
+
+For CI workflows, use the GitHub Action with a protected FailLens API token. The xpay MCP route remains the agent-native payment rail.

@@ -15,7 +15,7 @@ jobs:
         shell: bash
         run: |
           set +e
-          node -e "require('@stripe/stripe-js')" 2>&1 | tee faillens.log
+          node -e "console.error(\"npm ERR! Cannot find module '@stripe/stripe-js'\"); console.error('Process completed with exit code 1'); process.exit(1)" 2>&1 | tee faillens.log
           echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
 
       - name: Triage failed log with FailLens
@@ -23,5 +23,6 @@ jobs:
         uses: rileyross722/faillens-crash-gate@main
         with:
           log_file: faillens.log
-          xpay_mcp_url: ${{ secrets.FAILLENS_XPAY_MCP_URL }}
+          faillens_api_url: ${{ secrets.FAILLENS_API_URL }}
+          faillens_api_token: ${{ secrets.FAILLENS_API_TOKEN }}
           source: github_actions

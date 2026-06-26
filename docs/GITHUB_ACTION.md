@@ -4,7 +4,12 @@ FailLens Crash Gate can run inside GitHub Actions to triage failed command, CI, 
 
 The action is a thin connector. It does not contain the private FailLens core.
 
-It captures a failed command or reads a log file, sends the output to FailLens, and writes a compact redacted result to the GitHub job summary.
+For CI workflows, use protected direct API mode:
+
+    faillens_api_url: ${{ secrets.FAILLENS_API_URL }}
+    faillens_api_token: ${{ secrets.FAILLENS_API_TOKEN }}
+
+The xpay MCP route remains useful for MCP agents and local agent tooling, but it is not the recommended GitHub Action transport yet.
 
 ## Modes
 
@@ -18,7 +23,8 @@ Example:
       uses: rileyross722/faillens-crash-gate@main
       with:
         command: npm test
-        xpay_mcp_url: ${{ secrets.FAILLENS_XPAY_MCP_URL }}
+        faillens_api_url: ${{ secrets.FAILLENS_API_URL }}
+        faillens_api_token: ${{ secrets.FAILLENS_API_TOKEN }}
 
 ### 2. Log file mode
 
@@ -39,7 +45,8 @@ Example:
       uses: rileyross722/faillens-crash-gate@main
       with:
         log_file: faillens.log
-        xpay_mcp_url: ${{ secrets.FAILLENS_XPAY_MCP_URL }}
+        faillens_api_url: ${{ secrets.FAILLENS_API_URL }}
+        faillens_api_token: ${{ secrets.FAILLENS_API_TOKEN }}
 
 ## Inputs
 
@@ -47,15 +54,15 @@ Example:
 |---|---:|---|
 | command | no | Command to run and capture. |
 | log_file | no | Existing log file to triage. |
-| xpay_mcp_url | no | FailLens xpay MCP URL stored in GitHub Secrets. |
-| faillens_api_url | no | Optional direct hosted API base URL for private/direct deployments. |
-| faillens_api_token | no | Optional bearer token for direct API mode. |
+| faillens_api_url | yes for CI | Protected FailLens API URL. Store this in GitHub Secrets. |
+| faillens_api_token | yes for CI | FailLens API token. Store this in GitHub Secrets. |
+| xpay_mcp_url | no | Experimental MCP transport for local/MCP agent flows, not recommended for GitHub Actions yet. |
 | large | no | Use large-log route. |
 | source | no | Source label. Default: github_actions. |
 | context_budget | no | Context budget for returned evidence. |
 | quiet | no | Suppress raw command output. Default: true. |
 | fail_on_command_failure | no | Preserve command failure exit code in command mode. Default: true. |
-| max_xpay_bytes | no | xpay CLI mode safety cap. Use direct API mode for larger logs. |
+| max_xpay_bytes | no | xpay CLI mode safety cap. Use direct API mode for CI logs. |
 
 ## Outputs
 
@@ -79,10 +86,10 @@ The GitHub job summary shows compact triage fields.
 
 If safe_to_send is false, the summary tells the user to review manually before sending evidence to an agent or LLM.
 
-## Current MVP limitation
+## Current MVP guidance
 
-The xpay MCP mode calls FailLens through the MCP tool route and is best for normal-size logs.
+Use direct API mode for GitHub Actions and CI workflows.
 
-For very large logs, use direct hosted API mode or reduce the captured log window until the public paid direct API path is available.
+Use xpay MCP for MCP agents and local agent tooling.
 
 Do not use hosted payloadFile with xpay MCP. Hosted FailLens accepts log content, not remote file paths.

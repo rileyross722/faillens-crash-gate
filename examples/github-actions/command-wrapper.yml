@@ -13,8 +13,9 @@ jobs:
       - name: Run failing command through FailLens
         uses: rileyross722/faillens-crash-gate@main
         with:
-          command: node -e "require('@stripe/stripe-js')"
-          xpay_mcp_url: ${{ secrets.FAILLENS_XPAY_MCP_URL }}
+          command: node -e "console.error(\"npm ERR! Cannot find module '@stripe/stripe-js'\"); console.error('Process completed with exit code 1'); process.exit(1)"
+          faillens_api_url: ${{ secrets.FAILLENS_API_URL }}
+          faillens_api_token: ${{ secrets.FAILLENS_API_TOKEN }}
           source: github_actions
           quiet: "true"
           fail_on_command_failure: "true"

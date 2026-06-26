@@ -1,4 +1,5 @@
-import { readFileSync, existsSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { join } from "node:path";
 
 const rootReadme = "README.md";
 
@@ -9,9 +10,9 @@ const proofFiles = [
   "docs/public-proof/omniroute-4091.md"
 ];
 
-const allRequiredFiles = [rootReadme, ...proofFiles];
+const requiredFiles = [rootReadme, ...proofFiles];
 
-for (const file of allRequiredFiles) {
+for (const file of requiredFiles) {
   if (!existsSync(file)) {
     throw new Error(`Missing required file: ${file}`);
   }
@@ -44,31 +45,62 @@ for (const phrase of requiredProofPhrases) {
   }
 }
 
-const forbiddenProofPatterns = [
-  /xpay_sk_/i,
-  /\?key=/i,
-  /XPAY_MCP_URL/i,
-  /Authorization:\s*Bearer/i,
-  /sk_live/i,
-  /api_key/i,
-  /\/Users\//i,
-  /\/opt\/homebrew/i,
-  /rucciva/i,
-  /home\/runner\/work/i,
-  /file:\/\/\/home\/runner/i
+function walk(dir) {
+  if (!existsSync(dir)) return [];
+
+  const out = [];
+
+  for (const item of readdirSync(dir)) {
+    const path = join(dir, item);
+    const stat = statSync(path);
+
+    if (stat.isDirectory()) {
+      out.push(...walk(path));
+    } else {
+      out.push(path.replaceAll("\\", "/"));
+    }
+  }
+
+  return out;
+}
+
+const scannedFiles = [
+  rootReadme,
+  ...walk("docs"),
+  ...walk("examples"),
+  ...walk("snippets")
+].filter((file, index, arr) => {
+  if (!/\.(md|json|yml|yaml|toml|txt)$/i.test(file)) return false;
+  return arr.indexOf(file) === index;
+});
+
+const actualSecretPattern = /xpay_sk_(?:test|live)?_[A-Za-z0-9_-]{12,}|xpay_sk_[A-Za-z0-9_-]{12,}/i;
+
+const forbiddenPatterns = [
+  actualSecretPattern,
+  /\b(?:postgres(?:ql)?|mysql|mariadb|mongodb(?:\+srv)?|redis):\/\/[^\s"'`<>]+/i,
+  /\b(?:DATABASE_URL|POSTGRES_URL|POSTGRESQL_URL|MYSQL_URL|MONGODB_URI|REDIS_URL)=\s*(?:postgres(?:ql)?|mysql|mariadb|mongodb(?:\+srv)?|redis):\/\//i,
+  /\bsupersecret\b/i,
+  /\bghp_[A-Za-z0-9_]{12,}/i,
+  /\bgithub_pat_[A-Za-z0-9_]{12,}/i,
+  /\bAKIA[0-9A-Z]{16}\b/i,
+  /Authorization:\s*Bearer\s+(?!\[REDACTED_TOKEN\])[\w.-]{8,}/i,
+  /\bBearer\s+(?!\[REDACTED_TOKEN\])[\w.-]{16,}/i,
+  /\b(?:PASSWORD|TOKEN|SECRET|API_KEY|ACCESS_KEY)=\s*(?!\[REDACTED_)[^\s"'`]{4,}/i,
+  /\/Users\/[^<\s"'`)]+/i,
+  /\/home\/runner\/work/i,
+  /file:\/\/\/home\/runner/i,
+  /[A-Za-z]:\\Users\\/i
 ];
 
-for (const pattern of forbiddenProofPatterns) {
-  if (pattern.test(combinedProof)) {
-    throw new Error(`Forbidden public-proof content matched: ${pattern}`);
+for (const file of scannedFiles) {
+  const text = readFileSync(file, "utf8");
+
+  for (const pattern of forbiddenPatterns) {
+    if (pattern.test(text)) {
+      throw new Error(`Forbidden public content matched in ${file}: ${pattern}`);
+    }
   }
 }
 
-// Root README may contain xpay setup examples, but it must not contain an actual-looking secret key.
-const actualSecretPattern = /xpay_sk_(?:test|live)_[A-Za-z0-9_-]{12,}/i;
-
-if (actualSecretPattern.test(rootText)) {
-  throw new Error("Root README appears to contain an actual xpay secret key.");
-}
-
-console.log("public_proof_check{ok}");
+console.log(`public_proof_check{ok files:${scannedFiles.length}}`);

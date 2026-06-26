@@ -9,7 +9,7 @@ sample_secret_leak.log
 ## First lines
 
     Running CI job
-    DATABASE_URL=postgres://admin:supersecret@localhost:5432/app
+    DATABASE_URL=[REDACTED_DATABASE_URL]
     Authorization: Bearer [REDACTED_TOKEN]
     npm ERR! Cannot find module '@stripe/stripe-js'
     Process completed with exit code 1
@@ -18,7 +18,7 @@ sample_secret_leak.log
 ## Last lines
 
     Running CI job
-    DATABASE_URL=postgres://admin:supersecret@localhost:5432/app
+    DATABASE_URL=[REDACTED_DATABASE_URL]
     Authorization: Bearer [REDACTED_TOKEN]
     npm ERR! Cannot find module '@stripe/stripe-js'
     Process completed with exit code 1

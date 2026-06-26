@@ -25,7 +25,7 @@
     recommended_next{redact_then_retry}
     window_text_begin
     Running CI job
-    DATABASE_URL=[REDACTED:database_url]
+    DATABASE_URL=[REDACTED_DATABASE_URL]
     Authorization: [REDACTED:bearer_token]
     npm ERR! Cannot find module '@stripe/stripe-js'
     Process completed with exit code 1

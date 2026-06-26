@@ -1,0 +1,20 @@
+name: FailLens direct API example
+
+on:
+  workflow_dispatch:
+
+jobs:
+  faillens-direct-api:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run failing command through FailLens direct API
+        uses: rileyross722/faillens-crash-gate@main
+        with:
+          command: node -e "require('@stripe/stripe-js')"
+          faillens_api_url: ${{ secrets.FAILLENS_API_URL }}
+          faillens_api_token: ${{ secrets.FAILLENS_API_TOKEN }}
+          source: github_actions
+          quiet: "true"

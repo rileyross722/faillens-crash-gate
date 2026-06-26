@@ -1,0 +1,96 @@
+name: FailLens Crash Gate
+description: Triage failed terminal, MCP, CI, and agent-tool output into a redacted failure window.
+
+author: rileyross722
+
+branding:
+  icon: terminal
+  color: red
+
+inputs:
+  command:
+    description: Optional command to run and capture. If it fails, FailLens triages its output.
+    required: false
+    default: ""
+
+  log_file:
+    description: Optional path to an existing log file to triage.
+    required: false
+    default: ""
+
+  xpay_mcp_url:
+    description: FailLens xpay MCP URL. Store this in GitHub Secrets.
+    required: false
+    default: ""
+
+  faillens_api_url:
+    description: Optional direct FailLens hosted API base URL for private/direct deployments.
+    required: false
+    default: ""
+
+  faillens_api_token:
+    description: Optional bearer token for direct FailLens hosted API.
+    required: false
+    default: ""
+
+  large:
+    description: Use large-log triage route.
+    required: false
+    default: "false"
+
+  source:
+    description: Crash source label.
+    required: false
+    default: "github_actions"
+
+  context_budget:
+    description: Approximate context budget for returned failure evidence.
+    required: false
+    default: "1200"
+
+  quiet:
+    description: Suppress raw command output in logs.
+    required: false
+    default: "true"
+
+  fail_on_command_failure:
+    description: Exit with the wrapped command exit code when command mode fails.
+    required: false
+    default: "true"
+
+  max_xpay_bytes:
+    description: Max log bytes for xpay CLI mode. Use direct API mode for larger logs.
+    required: false
+    default: "180000"
+
+outputs:
+  decision:
+    description: FailLens decision.
+
+  risk:
+    description: FailLens risk level.
+
+  safe_to_send:
+    description: Whether the returned evidence is safe to send onward.
+
+  failure_type:
+    description: Detected failure type.
+
+  failure_subject:
+    description: Detected failure subject.
+
+  recommended_next:
+    description: Recommended next step.
+
+  triage_json_path:
+    description: Path to the triage JSON result.
+
+  log_path:
+    description: Path to the captured or provided log file.
+
+  exit_code:
+    description: Original wrapped command exit code.
+
+runs:
+  using: node20
+  main: scripts/faillens-action.mjs

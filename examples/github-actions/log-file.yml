@@ -1,0 +1,27 @@
+name: FailLens log file example
+
+on:
+  workflow_dispatch:
+
+jobs:
+  faillens-log-file:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate failing log
+        id: test
+        shell: bash
+        run: |
+          set +e
+          node -e "require('@stripe/stripe-js')" 2>&1 | tee faillens.log
+          echo "exit_code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+
+      - name: Triage failed log with FailLens
+        if: steps.test.outputs.exit_code != '0'
+        uses: rileyross722/faillens-crash-gate@main
+        with:
+          log_file: faillens.log
+          xpay_mcp_url: ${{ secrets.FAILLENS_XPAY_MCP_URL }}
+          source: github_actions

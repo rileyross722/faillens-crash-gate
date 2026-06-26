@@ -66,9 +66,11 @@ function walk(dir) {
 
 const scannedFiles = [
   rootReadme,
+  "action.yml",
   ...walk("docs"),
   ...walk("examples"),
-  ...walk("snippets")
+  ...walk("snippets"),
+  ...walk("scripts")
 ].filter((file, index, arr) => {
   if (!/\.(md|json|yml|yaml|toml|txt)$/i.test(file)) return false;
   return arr.indexOf(file) === index;

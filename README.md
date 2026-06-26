@@ -138,6 +138,25 @@ It does one narrow job:
 
     failed command -> redacted bounded evidence -> agent-safe next step
 
+
+## GitHub Action MVP
+
+FailLens also includes a thin GitHub Action connector for failed CI logs.
+
+It can:
+
+- run a command and triage the output if it fails
+- read an existing log file
+- call the hosted FailLens route
+- write a compact redacted result to the GitHub job summary
+- avoid posting raw logs by default
+
+Start here:
+
+- docs/GITHUB_ACTION.md
+- examples/github-actions/command-wrapper.yml
+- examples/github-actions/log-file.yml
+
 ## Public docs
 
 See:

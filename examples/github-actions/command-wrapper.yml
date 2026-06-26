@@ -1,0 +1,20 @@
+name: FailLens command wrapper example
+
+on:
+  workflow_dispatch:
+
+jobs:
+  faillens-command-wrapper:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run failing command through FailLens
+        uses: rileyross722/faillens-crash-gate@main
+        with:
+          command: node -e "require('@stripe/stripe-js')"
+          xpay_mcp_url: ${{ secrets.FAILLENS_XPAY_MCP_URL }}
+          source: github_actions
+          quiet: "true"
+          fail_on_command_failure: "true"

@@ -72,3 +72,7 @@ Examples:
 - [OmniRoute #3578: MCP startup failure from missing runtime import](./omniroute-3578.md)
 - [OmniRoute #5006: packaged route failure from bundled build path](./omniroute-5006.md)
 - [OmniRoute #4091: MCP dispatch failure with schema visible but routed call rejected](./omniroute-4091.md)
+
+## GitHub Action proof
+
+- [GitHub Action dogfood](./github-action-dogfood.md)

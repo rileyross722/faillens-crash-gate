@@ -175,7 +175,21 @@ function callXpayMcp({ xpayUrl, large, payload, source, contextBudget, maxXpayBy
     throw new Error(`xpay_mcp_call_failed: ${combined.slice(0, 2000)}`);
   }
 
-  return parseFastMcpText(combined);
+  const parsed = parseFastMcpText(combined);
+
+  if (
+    !parsed.decision &&
+    !parsed.risk &&
+    !parsed.failure?.type &&
+    !parsed.failure?.subject &&
+    (!Array.isArray(parsed.evidence) || parsed.evidence.length === 0)
+  ) {
+    throw new Error(
+      `xpay_mcp_no_tool_output: fastmcp exited successfully but returned no parseable FailLens result. Output: ${combined.slice(0, 2000)}`
+    );
+  }
+
+  return parsed;
 }
 
 function safeString(value) {

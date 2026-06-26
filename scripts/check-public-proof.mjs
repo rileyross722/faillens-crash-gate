@@ -70,7 +70,8 @@ const scannedFiles = [
   ...walk("docs"),
   ...walk("examples"),
   ...walk("snippets"),
-  ...walk("scripts")
+  ...walk("scripts"),
+  ...walk(".github")
 ].filter((file, index, arr) => {
   if (!/\.(md|json|yml|yaml|toml|txt)$/i.test(file)) return false;
   return arr.indexOf(file) === index;

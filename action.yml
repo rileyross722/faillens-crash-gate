@@ -92,5 +92,5 @@ outputs:
     description: Original wrapped command exit code.
 
 runs:
-  using: node20
+  using: node24
   main: scripts/faillens-action.mjs

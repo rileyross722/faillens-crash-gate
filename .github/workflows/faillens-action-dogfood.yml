@@ -8,10 +8,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version: "24"
 
@@ -20,11 +20,11 @@ jobs:
         uses: ./
         with:
           command: node -e "console.error(\"npm ERR! Cannot find module '@faillens/definitely-missing-test-package'\"); console.error('Require stack:'); console.error('- dogfood/index.js'); console.error('Process completed with exit code 1'); process.exit(1)"
-          xpay_mcp_url: ${{ secrets.FAILLENS_XPAY_MCP_URL }}
+          faillens_api_url: ${{ secrets.FAILLENS_API_URL }}
+          faillens_api_token: ${{ secrets.FAILLENS_API_TOKEN }}
           source: github_actions
           quiet: "true"
           fail_on_command_failure: "false"
-          max_xpay_bytes: "180000"
 
       - name: Show FailLens outputs
         run: |
@@ -37,7 +37,7 @@ jobs:
 
       - name: Upload FailLens triage artifact
         if: always()
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v4
         with:
           name: faillens-triage
           path: ${{ steps.faillens.outputs.triage_json_path }}
